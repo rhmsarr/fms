@@ -1,0 +1,58 @@
+﻿@model List<string>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    h3,h4{
+        text-align: center;
+    }
+    .card{
+        padding:20px;
+    }
+    button{
+        margin-top: 60px;
+        margin-left: 30px;
+    }
+</style>
+<br><br><br><br>
+<Form method="Post" asp-action="Index" asp-controller="Flights">
+    <div class="card">
+    <div class="row">
+        <div class="col-3"><label><h4>Flight Date</h4><br></label>
+            <input type="date" name="Date" class="form-control"> 
+            
+        </div>
+        <div class="col-3">
+            <label><h4>Departure</h4><br></label> <select class="form-select" name="DepartureCountry">
+            @foreach(string c in Model){
+                
+                <option value="@c">@c</option>
+                
+            }</select>
+            
+        </div>
+        <div class="col-3">
+             <label><h4>Arrival</h4><br></label>
+            <select name="ArrivalCountry" class="form-select">
+            @foreach(string c in Model){
+                
+                <option value="@c">@c</option>
+                
+            } </select>
+            
+        </div>
+        <div class="col-3">
+            
+            <button type="submit" class="btn btn-primary">Go to flights</button>
+        </div>
+    </div>
+    </div>
+
+     
+     
+    
+     
+</Form>
+<a asp-controller="Flights" asp-action="CreateFlight">New Flight</a>
+<a asp-controller="Flights" asp-action="AllFlights">All Flights</a>

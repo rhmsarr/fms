@@ -1,0 +1,74 @@
+@model AirlineManagementSystem.ViewModels.CreateFlight
+<style>
+    .card{
+        padding:20px;
+    }
+    h5{
+        text-align: center;
+    }
+    button{
+        margin-top:50px;
+        margin-bottom: 10px;
+    }
+</style>
+<br>
+<form asp-action="createFlight">
+    <div class="card">
+    <div class="row">
+        <div class="col-6">
+            <label><h5>Departure</h5></label>
+            <select asp-for="DepartureAirport" class="form-select">
+                @foreach(Airport airport in Model.airports){
+                    <option value="@airport.AirportId">
+                        @airport.AirportName
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-6">
+            <label><h5>Arrival</h5></label>
+            <select asp-for="ArrivalAirport" class="form-select">
+                @foreach(Airport airport in Model.airports){
+                    <option value="@airport.AirportId">
+                        @airport.AirportName
+                    </option>
+                }
+            </select>
+        </div>
+
+    </div>
+    
+    <br><br>
+    <div class="row">
+        <div class="col-3">
+            <label><h5>Departure Time</h5></label>
+            <input type="datetime-local" asp-for="@Model.DepartureTime" class="form-control">
+        </div>
+        <div class="col-3">
+            <label><h5>Arrival Time</h5></label>
+            <input type="datetime-local" asp-for="@Model.ArrivalTime" class="form-control">
+        </div>
+        <div class="col-3">
+            <label><h5>Price</h5></label>
+            <input type="number" steps="any" asp-for="@Model.Price" class="form-control">
+        </div>
+        <div class="col-3">
+            <label><h5>Airline</h5></label>
+             <select asp-for="AirlineID" class="form-select">
+                @foreach(Airline airline in Model.airlines){
+                    <option value="@airline.AirlineId">
+                        @airline.AirlineName
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+    
+    
+    
+    
+
+   
+    <button type="submit" class="btn btn-primary">Create Flight</button>
+    </div>
+</form>

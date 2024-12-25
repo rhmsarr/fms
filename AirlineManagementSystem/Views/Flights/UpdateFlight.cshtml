@@ -1,0 +1,50 @@
+@model AirlineManagementSystem.ViewModels.CreateFlight
+<style>
+    .card{
+        padding:20px;
+    }
+    h3,h4{
+        text-align: center;
+    }
+    
+</style>
+<br>
+
+<form asp-action="updateFlight">
+    <div class="card">
+    <div class="row">
+        <div class="col-6">
+            <h3>Departure: </h3><h4>@Model.DepartureAirport</h4><br><input class="form-control"type="datetime-local" asp-for="@Model.DepartureTime">
+        </div>
+        <div class="col-6">
+            <h3>Arrival:</h3> <h4>@Model.ArrivalAirport</h4><br><input class="form-control"type="datetime-local" asp-for="@Model.ArrivalTime">
+            
+        </div>
+
+    </div>
+    
+    <br><br>
+    <div class="row">
+        
+        <div class="col-6"><h4>Price</h4><input class="form-control" type="number" steps="any" asp-for="@Model.Price"> </div>
+        
+
+        <div class="col-6"> <h4>Airline</h4>
+            <select asp-for="AirlineID" class="form-select">
+                @foreach(Airline airline in Model.airlines){
+                    <option value="@airline.AirlineId">
+                        @airline.AirlineName
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+    
+   
+
+    
+    <input type="hidden" asp-for="@Model.FlightID">
+    <br><br>
+    <button type="submit" class="btn btn-primary">Update Flight</button>
+    </div>
+</form>

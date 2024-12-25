@@ -1,0 +1,56 @@
+<style>
+    .card{
+        padding:20px;
+    }
+</style>
+<p>Users chooses their options (seat types, number of baggage) and get their price calculated</p>
+<div class="row">
+    <div class="col-8">
+<form asp-action="LastCheckout">
+    <select class="form-select" name="model.Seat.TicketTypeID">
+        <option value=""> Seat type</option>
+        <option value="1"> Economy  </option>
+        <option value="2"> Business </option>
+        <option value="3"> First Class</option>
+    </select>
+    <br>
+    <div class="card">
+        <input type="hidden" name="model.baggages[0].BaggageTypeID" value="1">
+        <h5>First baggage</h5>
+        <p>Baggage info</p>
+
+    </div>
+    <br>
+    <div class="card">
+        <input type="hidden" name="model.baggages[1].BaggageTypeID" value="2">
+        <h5>Second baggage</h5>
+        <p>Baggage info</p>
+    </div>
+    <br>
+    <div class="card">
+        <input type="hidden" name="model.baggages[2].BaggageTypeID" value="3">
+        <h5>Third baggage</h5>
+        <p>Baggage info</p>
+    </div>
+    <br>
+    
+    <br>
+    <div class="card">
+        <h5>Add baggage</h5>
+        <select class="form-select">
+            <option>Baggage type</option>
+        </select>
+        <br>
+        <button class="btn btn-primary">Add baggage</button>
+
+    <br><br><br>
+    </div>
+    <div class="col-4">
+        <br><br><br>
+        <h3 class="text-danger">$300</h3>
+        <button type="submit" class="btn btn-primary" >Proceed to checkout</button>
+    </div>
+</form>
+
+    
+</div>

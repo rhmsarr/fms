@@ -1,0 +1,64 @@
+# Visual Studio and Build Folders
+.vscode/
+.idea/
+*.user
+*.suo
+*.cache
+*.log
+
+# Build Results
+bin/
+obj/
+*.dll
+*.exe
+
+# IIS Express
+.config/
+
+# User-specific Files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ASP.NET
+App_Data/
+App_Browsers/
+
+# Packages
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Web Configuration
+*.pubxml
+*.publishproj
+
+# Logs
+*.log
+logs/
+
+# Others
+*.vspscc
+*.vssscc
+Thumbs.db
+*.class
+*.pdb
+*.cache
+*.crf
+*~
+*.dbmdl
+*.sln.docstates
+
+# Temporary files
+$RECYCLE.BIN/

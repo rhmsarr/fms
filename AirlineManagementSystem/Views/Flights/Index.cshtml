@@ -1,0 +1,27 @@
+@model List<Flight>
+
+<style>
+    .card{
+        padding:20px;
+    }
+    h4{
+        float:inline-end;
+    }
+</style>
+
+ 
+    @foreach(Flight flight in Model){
+        <div class="card">
+            <span><h3 style="display: inline-block">@flight.DepartureTime.TimeOfDay - @flight.ArrivalTime.TimeOfDay </h3> <h4> 4 hours</h4></span>
+            <p>@flight.DepartureCity @flight.DepartureAirport - @flight.ArrivalCity @flight.ArrivalAirport</p>
+            <p>@flight.AirlineName</p>
+            <span><h5 class="text-danger" style="display: inline-block"> $@flight.Price</h5>
+            <a asp-controller="Flights" asp-action="Checkout" asp-route-id="@flight.FlightID" class="btn btn-primary" style="float:inline-end" >Checkout</a></span>
+            
+        </div>
+        <br><br>
+    }
+     
+     
+
+
