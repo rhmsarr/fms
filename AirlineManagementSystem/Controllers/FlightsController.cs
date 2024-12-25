@@ -33,7 +33,8 @@ namespace AirlineManagementSystem.Controllers{
                 ""Flight"".""ArrivalTime"",
                 ""Flight"".""Price"",
                 ""Airline"".""AirlineName"",
-                ""Flight"".""FlightID""
+                ""Flight"".""FlightID"",
+                flightduration(""Flight"".""FlightID"") AS Duration
             FROM ""Flight""
             INNER JOIN ""Plane"" ON ""Flight"".""PlaneID"" = ""Plane"".""PlaneID""
             INNER JOIN ""Airline"" ON ""Airline"".""AirlineID"" = ""Plane"".""AirlineID""
@@ -66,7 +67,8 @@ namespace AirlineManagementSystem.Controllers{
                             ArrivalTime = reader.GetDateTime(reader.GetOrdinal("ArrivalTime")),
                             Price = reader.GetDecimal(reader.GetOrdinal("Price")),
                             AirlineName = reader.GetString(reader.GetOrdinal("AirlineName")),
-                            FlightID = reader.GetInt32(reader.GetOrdinal("FlightID"))
+                            FlightID = reader.GetInt32(reader.GetOrdinal("FlightID")),
+                            Duration = reader.GetString(reader.GetOrdinal("Duration"))
                         });
                     }
                 }
@@ -83,12 +85,77 @@ namespace AirlineManagementSystem.Controllers{
 
             return View();
         }
-        [HttpPost]
-        public IActionResult Checkout(Ticket model) {
+        
+        
+         [HttpGet]
+        public IActionResult GetBasePrice(int FlightID)
+        {
+            decimal basePrice;
+            string query = @$"SELECT ""Price"" FROM ""Flight"" WHERE ""FlightID"" = @FlightID";
 
-            return View();
+            using(var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+                using(var command = new NpgsqlCommand(query,connection))
+                {
+                    command.Parameters.AddWithValue("@FlightID", FlightID);
+                    basePrice = (decimal)command.ExecuteScalar();
+                }
+            }
+
+            return Json(new {basePrice});
         }
-        public IActionResult LastCheckout(){
+
+         private decimal CallTotalPrice(int FlightID, int TicketTypeID, int BaggageTypeID)
+        {
+            string query = @$"SELECT ""GetTotalPrice""(@flightid, @tickettypeid, @baggagetypeid)";
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {   
+                connection.Open();
+                using(var command = new NpgsqlCommand(query,connection))
+                {
+                    command.Parameters.AddWithValue("@flightid",FlightID);
+                    command.Parameters.AddWithValue("@tickettypeid", TicketTypeID);
+                    command.Parameters.AddWithValue("@baggagetypeid", BaggageTypeID);
+                    return Convert.ToDecimal(command.ExecuteScalar());
+                }
+
+              
+            }
+        }
+
+        [HttpPost]
+        public IActionResult GetTotalPrice(int FlightID, int TicketTypeID, int BaggageTypeID)
+        {
+            decimal totalPrice = CallTotalPrice(FlightID, TicketTypeID,BaggageTypeID);
+            return Json(new{totalPrice});
+        }
+        
+         [HttpPost]
+        public IActionResult LastCheckoutPost(decimal totalPrice){
+          return RedirectToAction("LastCheckout", new {totalPrice});
+        }
+        
+        public void savebaggageid(int ticketid, int baggagetypeid)
+        {
+            string query = @" INSERT INTO ""Baggage""(""TicketID"",""BaggageTypeID"") VALUES (@TicketID, @BaggageTypeID)";
+
+            using(var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@TicketID", ticketid);
+                    command.Parameters.AddWithValue("BaggageTypeID", baggagetypeid);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        [HttpGet]
+        public IActionResult LastCheckout(decimal totalPrice)
+        {
+            ViewData["TotalPrice"] = totalPrice;
             return View();
         }
     
