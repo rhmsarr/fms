@@ -2,6 +2,8 @@
  
 </p>
 <form>
+        <input type="hidden" name="baggagetypeid" id="baggagetypeid">
+
     <div class="row">
         <div class="col-6">
             <label>Name</label>
@@ -23,7 +25,7 @@
             </div>
         </div>
         <div class="col-6">
-            <h2>$300</h2>
+            <h2>@($"${ViewData["TotalPrice"]}")</h2>
             <label>CC Number</label>
             <input type="text" class="form-control">
             <label>Expiration Date</label>

@@ -1,13 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
 <style>
     .card{
         padding:20px;
     }
 </style>
-<p>Users chooses their options (seat types, number of baggage) and get their price calculated</p>
+
+</head>
+<body>   
+    
+<form asp-action="LastCheckoutPost" method="post">
+
 <div class="row">
     <div class="col-8">
-<form asp-action="LastCheckout">
-    <select class="form-select" name="model.Seat.TicketTypeID">
+    <input type="hidden" id="flightID" name="flightID"/>
+    <input type="hidden" id="totalPrice" name="totalPrice"/>
+
+
+
+    <select class="form-select" id="ticketTypeID">
         <option value=""> Seat type</option>
         <option value="1"> Economy  </option>
         <option value="2"> Business </option>
@@ -36,21 +48,63 @@
     
     <br>
     <div class="card">
-        <h5>Add baggage</h5>
-        <select class="form-select">
-            <option>Baggage type</option>
-        </select>
-        <br>
-        <button class="btn btn-primary">Add baggage</button>
+        <h5>Extra Baggage Type </h5>
+        <select class="form-select" id="baggageTypeID" name="baggageTypeID">
+        <option value=""> Baggage type</option>
+        <option value="1"> Personal Item  </option>
+        <option value="2"> Carry-On </option>
+        <option value="3"> Checked</option>
+    </select>
 
     <br><br><br>
     </div>
-    <div class="col-4">
+ </div>
+     <div class="col-4">
         <br><br><br>
-        <h3 class="text-danger">$300</h3>
+        <h3 class="text-danger" id="priceDisplay">0.00</h3>
         <button type="submit" class="btn btn-primary" >Proceed to checkout</button>
     </div>
-</form>
-
-    
 </div>
+    </form>
+   
+   
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        console.log('jQuery is working');
+       
+        const urlParams = new URLSearchParams(window.location.search);
+        const flightID  = urlParams.get('FlightID'); 
+        console.log('Flight ID:', flightID);
+
+        if(flightID)
+        {
+            $.get('/Flights/GetBasePrice', {FlightID: flightID }, function(response){
+                console.log('Base Price Response:', response);
+                $('#priceDisplay').text('$' + response.basePrice.toFixed(2));
+                $('#totalPrice').val(response.basePrice.toFixed(2));
+            });
+        } 
+
+        $('#ticketTypeID, #baggageTypeID').on('change', function() {
+            const ticketTypeID = parseInt($('#ticketTypeID').val());
+            const baggageTypeID = parseInt($('#baggageTypeID').val());
+            console.log('Ticket Type ID:', ticketTypeID); 
+            console.log('Baggage Type ID:', baggageTypeID);
+            if(ticketTypeID && flightID)
+            {
+                $.post('/Flights/GetTotalPrice',{FlightID: flightID, TicketTypeID: ticketTypeID, BaggageTypeID: baggageTypeID || 0}, function(response) {
+                    const totalPrice = response.totalPrice.toFixed(2);
+                    $('#priceDisplay').text('$' + totalPrice); 
+                    $('#totalPrice').val(totalPrice);
+                });
+            }
+        });   
+
+    });
+
+</script> 
+</body>
+</html>
+
